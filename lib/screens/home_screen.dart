@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:voic_assistant/pallete.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,6 +11,44 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  //first we need to initialize it
+  final speechToText = SpeechToText();
+  String lastWords = '';  // This variable would actually store our words whatever we said
+
+  @override
+  void initState(){
+    super.initState();
+    initSpeechToText(); // for permissions we must be initializing it
+  }
+
+  // Methods taken from documents
+  Future<void> initSpeechToText() async{
+    await speechToText.initialize();
+    setState(() {});
+  }
+  
+  Future<void> startListening() async {
+    await speechToText.listen(onResult: onSpeechResult);
+    setState(() {});
+  }
+
+  Future<void> stopListening() async {
+    await speechToText.stop();
+    setState(() {});
+  }
+
+  void onSpeechResult(SpeechRecognitionResult result) {
+    setState(() {
+      lastWords = result.recognizedWords;
+    });
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    speechToText.stop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,7 +220,21 @@ class _HomeScreenState extends State<HomeScreen> {
         ),),
       ),
       floatingActionButton: FloatingActionButton(
-      onPressed: () {},
+      onPressed: () async{
+        // Users clicks it will listen
+        if(await speechToText.hasPermission && 
+        speechToText.isNotListening){
+          await startListening();
+        }
+        // If already listening then clicked means we need to stop
+        else if(speechToText.isListening){
+          await stopListening();
+        }
+        // both cases fail, means we don't have permisson, so get permission
+        else{
+          initSpeechToText();
+        }
+      },
       backgroundColor: Pallete.firstSuggestionBoxColor,
       child: Icon(Icons.mic),),
     );
