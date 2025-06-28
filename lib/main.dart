@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Voice Assistant',
-      theme: ThemeData.dark(),
+      theme: ThemeData.light(),
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,
     );

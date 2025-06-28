@@ -58,11 +58,131 @@ class _HomeScreenState extends State<HomeScreen> {
               ).copyWith(
                 top: 30
               ),
-              decoration: BoxDecoration(),
-            )
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Pallete.borderColor,
+                ),
+                borderRadius: BorderRadius.circular(20).copyWith(
+                  topLeft: Radius.zero
+                )
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text("Good Morning, what task can i do for you?",
+                style: TextStyle(
+                  fontFamily: 'Cera Pro',
+                  color: Pallete.mainFontColor,
+                  fontSize: 22
+                ),),
+              ),
+            ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.only(top: 10, left: 22),
+                  child: Text("Here's a list of Features",
+                  style: TextStyle(
+                    fontFamily: 'Cera Pro',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Pallete.mainFontColor
+                  ),),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12
+                        ),
+                        decoration: BoxDecoration(
+                          color: Pallete.firstSuggestionBoxColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("ChatGPT",
+                            style: TextStyle(
+                              fontFamily: 'Cera Bold',
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                            ),),
+                            const SizedBox(height: 5,),
+                            Text("A smarter way to stay organised and informed with chatGPT",
+                            style: TextStyle(
+                              fontFamily: 'Cera Pro',
+                              fontSize: 16,
+                            ),),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 18),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12
+                        ),
+                        decoration: BoxDecoration(
+                          color: Pallete.secondSuggestionBoxColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Dall-E",
+                            style: TextStyle(
+                              fontFamily: 'Cera Bold',
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                            ),),
+                            const SizedBox(height: 5,),
+                            Text("Get inspired and stay creative with your personal assistant powered by Dall-E",
+                            style: TextStyle(
+                              fontFamily: 'Cera Pro',
+                              fontSize: 16,
+                            ),),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12
+                        ),
+                        decoration: BoxDecoration(
+                          color: Pallete.thirdSuggestionBoxColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Smart Voice Assistant",
+                            style: TextStyle(
+                              fontFamily: 'Cera Bold',
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                            ),),
+                            const SizedBox(height: 5,),
+                            Text("Get the best of both worlds with a voice assistant powered by Dall-E and ChatGPT",
+                            style: TextStyle(
+                              fontFamily: 'Cera Pro',
+                              fontSize: 16,
+                            ),),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
           ],
         ),),
       ),
+      floatingActionButton: FloatingActionButton(
+      onPressed: () {},
+      backgroundColor: Pallete.firstSuggestionBoxColor,
+      child: Icon(Icons.mic),),
     );
   }
 }
