@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:voic_assistant/open_ai_service.dart';
 import 'package:voic_assistant/pallete.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //first we need to initialize it
   final speechToText = SpeechToText();
   String lastWords = '';  // This variable would actually store our words whatever we said
+  final openAiService = OpenAiService();
 
   @override
   void initState(){
@@ -228,6 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         // If already listening then clicked means we need to stop
         else if(speechToText.isListening){
+          await openAiService.isArtPromptAPI(lastWords); //whatever prompt was given we will check once user stops recording what user exactly needs
           await stopListening();
         }
         // both cases fail, means we don't have permisson, so get permission
