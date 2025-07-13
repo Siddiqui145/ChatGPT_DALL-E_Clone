@@ -18,6 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String lastWords = '';  // This variable would actually store our words whatever we said
   final openAiService = OpenAiService();
   final flutterTts = FlutterTts();
+  String? generatedContent;
+  String? generatedImageUrl;
 
   @override
   void initState(){
@@ -104,131 +106,151 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 20, vertical: 10
-              ),
-              margin: EdgeInsets.symmetric(
-                horizontal: 40
-              ).copyWith(
-                top: 30
-              ),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Pallete.borderColor,
+            Visibility(
+               visible: generatedContent == null && generatedImageUrl == null,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20, vertical: 10
                 ),
-                borderRadius: BorderRadius.circular(20).copyWith(
-                  topLeft: Radius.zero
-                )
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text("Good Morning, what task can i do for you?",
-                style: TextStyle(
-                  fontFamily: 'Cera Pro',
-                  color: Pallete.mainFontColor,
-                  fontSize: 22
-                ),),
-              ),
-            ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.only(top: 10, left: 22),
-                  child: Text("Here's a list of Features",
+                margin: EdgeInsets.symmetric(
+                  horizontal: 40
+                ).copyWith(
+                  top: 30
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Pallete.borderColor,
+                  ),
+                  borderRadius: BorderRadius.circular(20).copyWith(
+                    topLeft: Radius.zero
+                  )
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    generatedContent == null ?
+                    "Good Morning, what task can i do for you?"
+                    : generatedContent!,
                   style: TextStyle(
                     fontFamily: 'Cera Pro',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Pallete.mainFontColor
+                    color: Pallete.mainFontColor,
+                    fontSize: generatedContent == null ? 22 : 18
                   ),),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12
+              ),
+            ),
+            if(generatedImageUrl!= null)
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(generatedImageUrl!)),
+              ),
+                Visibility(
+                  visible: generatedContent == null && generatedImageUrl == null,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.only(top: 10, left: 22),
+                    child: Text("Here's a list of Features",
+                    style: TextStyle(
+                      fontFamily: 'Cera Pro',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Pallete.mainFontColor
+                    ),),
+                  ),
+                ),
+                Visibility(
+                  visible: generatedContent == null && generatedImageUrl == null,
+                  //visible only when content is not generated
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12
+                          ),
+                          decoration: BoxDecoration(
+                            color: Pallete.firstSuggestionBoxColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("ChatGPT",
+                              style: TextStyle(
+                                fontFamily: 'Cera Bold',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
+                              ),),
+                              const SizedBox(height: 5,),
+                              Text("A smarter way to stay organised and informed with chatGPT",
+                              style: TextStyle(
+                                fontFamily: 'Cera Pro',
+                                fontSize: 16,
+                              ),),
+                            ],
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: Pallete.firstSuggestionBoxColor,
-                          borderRadius: BorderRadius.circular(20),
+                  
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 18),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12
+                          ),
+                          decoration: BoxDecoration(
+                            color: Pallete.secondSuggestionBoxColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Dall-E",
+                              style: TextStyle(
+                                fontFamily: 'Cera Bold',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
+                              ),),
+                              const SizedBox(height: 5,),
+                              Text("Get inspired and stay creative with your personal assistant powered by Dall-E",
+                              style: TextStyle(
+                                fontFamily: 'Cera Pro',
+                                fontSize: 16,
+                              ),),
+                            ],
+                          ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("ChatGPT",
-                            style: TextStyle(
-                              fontFamily: 'Cera Bold',
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            ),),
-                            const SizedBox(height: 5,),
-                            Text("A smarter way to stay organised and informed with chatGPT",
-                            style: TextStyle(
-                              fontFamily: 'Cera Pro',
-                              fontSize: 16,
-                            ),),
-                          ],
-                        ),
-                      ),
-
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 18),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12
-                        ),
-                        decoration: BoxDecoration(
-                          color: Pallete.secondSuggestionBoxColor,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Dall-E",
-                            style: TextStyle(
-                              fontFamily: 'Cera Bold',
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            ),),
-                            const SizedBox(height: 5,),
-                            Text("Get inspired and stay creative with your personal assistant powered by Dall-E",
-                            style: TextStyle(
-                              fontFamily: 'Cera Pro',
-                              fontSize: 16,
-                            ),),
-                          ],
-                        ),
-                      ),
-
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12
-                        ),
-                        decoration: BoxDecoration(
-                          color: Pallete.thirdSuggestionBoxColor,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Smart Voice Assistant",
-                            style: TextStyle(
-                              fontFamily: 'Cera Bold',
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            ),),
-                            const SizedBox(height: 5,),
-                            Text("Get the best of both worlds with a voice assistant powered by Dall-E and ChatGPT",
-                            style: TextStyle(
-                              fontFamily: 'Cera Pro',
-                              fontSize: 16,
-                            ),),
-                          ],
-                        ),
-                      )
-                    ],
+                  
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12
+                          ),
+                          decoration: BoxDecoration(
+                            color: Pallete.thirdSuggestionBoxColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Smart Voice Assistant",
+                              style: TextStyle(
+                                fontFamily: 'Cera Bold',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
+                              ),),
+                              const SizedBox(height: 5,),
+                              Text("Get the best of both worlds with a voice assistant powered by Dall-E and ChatGPT",
+                              style: TextStyle(
+                                fontFamily: 'Cera Pro',
+                                fontSize: 16,
+                              ),),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
           ],
@@ -244,7 +266,17 @@ class _HomeScreenState extends State<HomeScreen> {
         // If already listening then clicked means we need to stop
         else if(speechToText.isListening){
           final speech = await openAiService.isArtPromptAPI(lastWords); //whatever prompt was given we will check once user stops recording what user exactly needs
-          await systemSpeak(speech);
+          if(speech.contains('https')){
+            generatedImageUrl = speech; //coz for image we don't need speech
+            generatedContent = null;
+            setState(() {});
+          }
+          else{
+            generatedImageUrl = null;
+            generatedContent = speech;
+            setState(() {});
+            await systemSpeak(speech);
+          }
           await stopListening();
         }
         // both cases fail, means we don't have permisson, so get permission
@@ -253,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       backgroundColor: Pallete.firstSuggestionBoxColor,
-      child: Icon(Icons.mic),),
+      child: Icon(speechToText.isListening ? Icons.stop : Icons.mic),),
     );
   }
 }
