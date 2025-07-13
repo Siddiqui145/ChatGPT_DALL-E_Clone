@@ -24,12 +24,34 @@ class OpenAiService {
       );
       print(res.body);
       if(res.statusCode == 200){
-        print("yayyy");
+        String content = jsonDecode(res.body)['choices'][0]['message']['content'];
+        content = content.trim(); //for spaces removal
+
+        switch(content){
+          case 'Yes':
+          case 'yes':
+          case 'Yes.':
+          case 'yes.':
+          final res = await dallEApi(prompt);
+          return res;
+
+          default:
+          final res = await chatGPTAPI(prompt);
+          return res;
+        }
       }
-      return 'Ai';
+      return 'An Internal Error Occured!';
     }
     catch (e){
       return e.toString();
     }
+  }
+
+  Future<String> chatGPTAPI(String prompt) async{
+    return 'CHATGPT';
+  }
+
+  Future<String> dallEApi(String prompt)async{
+    return 'DALL-E';
   }
 }
