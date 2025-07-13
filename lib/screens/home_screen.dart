@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:voic_assistant/open_ai_service.dart';
@@ -16,11 +17,18 @@ class _HomeScreenState extends State<HomeScreen> {
   final speechToText = SpeechToText();
   String lastWords = '';  // This variable would actually store our words whatever we said
   final openAiService = OpenAiService();
+  final flutterTts = FlutterTts();
 
   @override
   void initState(){
     super.initState();
     initSpeechToText(); // for permissions we must be initializing it
+    initTextToSpeech();
+  }
+
+  Future<void> initTextToSpeech() async{
+    await flutterTts.setSharedInstance(true); //documentation
+    setState(() {});
   }
 
   // Methods taken from documents
@@ -45,10 +53,15 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> systemSpeak(String content) async {
+    await flutterTts.speak(content);  //this would speak the content generated
+  }
+
   @override
   void dispose(){
     super.dispose();
     speechToText.stop();
+    flutterTts.stop();
   }
 
   @override
@@ -230,7 +243,8 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         // If already listening then clicked means we need to stop
         else if(speechToText.isListening){
-          await openAiService.isArtPromptAPI(lastWords); //whatever prompt was given we will check once user stops recording what user exactly needs
+          final speech = await openAiService.isArtPromptAPI(lastWords); //whatever prompt was given we will check once user stops recording what user exactly needs
+          await systemSpeak(speech);
           await stopListening();
         }
         // both cases fail, means we don't have permisson, so get permission
